@@ -4,6 +4,8 @@ FROM node:22.16.0-alpine3.22 AS base
 FROM base AS deps
 WORKDIR /app
 ADD package.json package-lock.json ./
+RUN npm install -g npm@11.8.0
+
 RUN npm ci
 
 # Production only deps stage
