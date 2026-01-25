@@ -10,7 +10,10 @@ WORKDIR /app
 # Étape 2 : Dépendances
 FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci
+
+RUN npm install -g npm@11.8.0
+
+RUN npm ci --omit="dev"
 
 # Étape 3 : Build
 FROM base AS build
