@@ -1,35 +1,29 @@
-# Étape 1 : Base
-FROM node:20-alpine AS base
+FROM node:22.16.0-alpine3.22 AS base
 
-# Installation des dépendances nécessaires pour certaines libs (ex: sharp, python, etc.)
-RUN apk --no-cache add curl
-
-# Configuration du répertoire de travail
-WORKDIR /app
-
-# Étape 2 : Dépendances
+# All deps stage
 FROM base AS deps
-COPY package.json package-lock.json ./
+WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci
 
-RUN npm install -g npm@11.8.0
+# Production only deps stage
+FROM base AS production-deps
+WORKDIR /app
+ADD package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-RUN npm ci --omit="dev"
-
-# Étape 3 : Build
+# Build stage
 FROM base AS build
+WORKDIR /app
 COPY --from=deps /app/node_modules /app/node_modules
-COPY . .
+ADD . .
 RUN node ace build
 
-# Étape 4 : Production
-FROM base AS production
+# Production stage
+FROM base
 ENV NODE_ENV=production
-COPY --from=deps /app/node_modules /app/node_modules
+WORKDIR /app
+COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
-COPY --from=build /app/package.json /app/package.json
-
-# Expose le port (Adonis utilise souvent 3333)
-EXPOSE 3333
-
-# Commande de démarrage
+EXPOSE 8080
 CMD ["node", "./bin/server.js"]
