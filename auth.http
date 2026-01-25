@@ -1,0 +1,59 @@
+@hostname = localhost
+@port = 3333
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+###
+@email = alexcool68@free.fr
+@password = 123456789
+
+### REGISTER
+POST http://{{host}}/api/auth/register HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "fullname": "Alexis LEROY"
+}
+
+###
+# @name login
+@authToken = Bearer {{login.response.body.token}}
+POST http://{{host}}/api/auth/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+###
+
+# @name session
+GET http://{{host}}/api/auth/session HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### LOGOUT
+# @name logout
+POST http://{{host}}/api/auth/logout HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### forgot-password
+POST http://{{host}}/api/auth/forgot-password HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "alexcool68@free.fr"
+}
+
+### reset-password
+POST http://{{host}}/api/auth/reset-password HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "token": "KXCg1YgTDOZdPG6dcNMK-AYNcZbGXQnnZagRnsmZXUf9UP3Ug9fSnQgokG1F6DkZ",
+    "password": "123456789"
+}

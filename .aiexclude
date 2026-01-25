@@ -1,0 +1,24 @@
+# Dossiers de build et de cache de Flutter/Dart
+
+node_modules/
+.nuxt/
+.github/
+build/
+.dart_tool/
+.pub_cache/
+
+# Fichiers générés (très important si vous utilisez des générateurs de code)
+
+**/\*.g.dart
+**/\*.freezed.dart
+
+# Fichiers de configuration de l'IDE
+
+.idea/
+.vscode/
+
+# Rapports, logs et autres fichiers non pertinents
+
+_.log
+_.html
+\*.apk
