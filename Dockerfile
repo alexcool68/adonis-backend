@@ -1,27 +1,32 @@
-ARG NODE_IMAGE=node:20.14.0-bookworm-slim
+# Étape 1 : Base
+FROM node:20-alpine AS base
 
-FROM $NODE_IMAGE AS base
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl dumb-init
-RUN mkdir -p /home/node/app && chown node:node /home/node/app
-WORKDIR /home/node/app
-USER node
-RUN mkdir tmp
+# Installation des dépendances nécessaires pour certaines libs (ex: sharp, python, etc.)
+RUN apk --no-cache add curl
 
-FROM base AS development
-COPY --chown=node:node package*.json ./
+# Configuration du répertoire de travail
+WORKDIR /app
+
+# Étape 2 : Dépendances
+FROM base AS deps
+COPY package.json package-lock.json ./
 RUN npm ci
-COPY --chown=node:node . .
 
-FROM development AS build
+# Étape 3 : Build
+FROM base AS build
+COPY --from=deps /app/node_modules /app/node_modules
+COPY . .
 RUN node ace build
 
+# Étape 4 : Production
 FROM base AS production
 ENV NODE_ENV=production
-COPY --chown=node:node ./package*.json ./
-RUN npm ci --omit=dev
-COPY --chown=node:node --from=build /home/node/app/build .
+COPY --from=deps /app/node_modules /app/node_modules
+COPY --from=build /app/build /app
+COPY --from=build /app/package.json /app/package.json
 
-COPY --chown=node:node entrypoint.sh /home/node/app
-RUN chmod +x /home/node/app/entrypoint.sh
+# Expose le port (Adonis utilise souvent 3333)
+EXPOSE 3333
 
-ENTRYPOINT ["/home/node/app/entrypoint.sh"]
+# Commande de démarrage
+CMD ["node", "./bin/server.js"]
