@@ -18,7 +18,7 @@ router.get('/', async () => {
   return { hello: 'world' }
 })
 
-router.get('/ping', [SystemController, 'ping'])
+router.get('/system/ping', [SystemController, 'ping'])
 
 router
   .group(() => {
