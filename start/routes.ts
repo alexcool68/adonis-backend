@@ -12,10 +12,13 @@ import { middleware } from '#start/kernel'
 
 import AuthController from '#controllers/auth_controller'
 import PasswordResetController from '#controllers/password_resets_controller'
+import SystemController from '#controllers/system_controller'
 
 router.get('/', async () => {
   return { hello: 'world' }
 })
+
+router.get('/ping', [SystemController, 'ping'])
 
 router
   .group(() => {
