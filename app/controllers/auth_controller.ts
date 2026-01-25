@@ -16,20 +16,20 @@ export default class AuthController {
     })
   }
 
-  async login({ request, auth, response }: HttpContext) {
+  async login({ request, auth }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
     const user = await User.verifyCredentials(email, password)
     logger.info(`[AUTH][LOGIN] - ${user.email}`)
     return await auth.use('api').createToken(user)
   }
 
-  async logout({ auth, response }: HttpContext) {
+  async logout({ auth }: HttpContext) {
     await auth.use('api').invalidateToken()
     logger.info(`[AUTH][LOGOUT] - ${auth.user?.email}`)
     // return response.ok({})
   }
 
-  async session({ request, auth, response }: HttpContext) {
+  async session({ auth, response }: HttpContext) {
     logger.info(`[AUTH][SESSION] - ${auth.user?.email}`)
     // auth.user contient l'utilisateur si la session est valide
     return response.ok({ user: auth.user })
