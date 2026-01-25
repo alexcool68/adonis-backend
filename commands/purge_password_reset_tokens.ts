@@ -12,7 +12,7 @@ export default class PurgePasswordResetTokens extends BaseCommand {
   }
 
   async run() {
-    this.logger.info('Démarrage du nettoyage des tokens....')
+    this.logger.info('Démarrage du nettoyage des tokens...')
 
     const now = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')
 
