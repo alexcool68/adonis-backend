@@ -3,6 +3,8 @@
 @host = {{hostname}}:{{port}}
 @contentType = application/json
 
+@lastPost = 0
+
 ###
 @email = alexcool68@free.fr
 @password = 123456789

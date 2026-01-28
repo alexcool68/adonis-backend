@@ -1,0 +1,62 @@
+@hostname = localhost
+@port = 3333
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@lastPost = 0
+
+###
+@email = alexcool68@free.fr
+@password = 123456789
+
+###
+# @name login
+@authToken = Bearer {{login.response.body.token}}
+POST http://{{host}}/api/auth/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### POST a article
+# @name postArticle
+@lastPost = {{postArticle.response.body.id}}
+POST http://{{host}}/api/posts/store HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+    "title": "A title 3",
+    "content": "some content 3"
+}
+
+### EDIT a article
+# @name editArticle
+PATCH http://{{host}}/api/posts/{{lastPost}} HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+{
+    "title": "A title 2",
+    "content": "some content 2"
+}
+
+### DELETE a article
+# @name deleteArticle
+DELETE http://{{host}}/api/posts/49 HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### READ
+# @name readArticle
+GET http://{{host}}/api/posts HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### READ myPost
+# @name readArticle
+GET http://{{host}}/api/posts/myPost HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}

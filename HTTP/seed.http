@@ -1,0 +1,39 @@
+@hostname = localhost
+@port = 3333
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@lastPost = 0
+
+###
+@email = alexcool68@free.fr
+@password = 123456789
+
+###
+# @name login
+@authToken = Bearer {{login.response.body.token}}
+POST http://{{host}}/api/auth/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### Reset BD
+# @name reset
+GET http://{{host}}/api/system/reset HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### Ping
+# @name ping
+GET http://{{host}}/api/system/ping HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
+
+### SEED Users
+# @name seedUser
+GET http://{{host}}/api/system/seedUser HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
