@@ -17,6 +17,12 @@ export default class Post extends BaseModel {
   @column()
   declare content: string
 
+  @column()
+  declare slug: string
+
+  @column()
+  declare isPublished: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

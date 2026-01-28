@@ -16,7 +16,7 @@ Content-Type: {{contentType}}
 {
     "email": "{{email}}",
     "password": "{{password}}",
-    "fullname": "Alexis LEROY"
+    "fullName": "Alexis LEROY"
 }
 
 ###

@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
+const HealthChecksController = () => import('#controllers/health_checks_controller')
 const AuthController = () => import('#controllers/auth_controller')
 const PasswordResetController = () => import('#controllers/password_resets_controller')
 const SystemController = () => import('#controllers/system_controller')
@@ -18,6 +19,8 @@ const PostsController = () => import('#controllers/posts_controller')
 router.get('/', async () => {
   return { hello: 'world' }
 })
+
+router.get('/health', [HealthChecksController])
 
 router
   .group(() => {

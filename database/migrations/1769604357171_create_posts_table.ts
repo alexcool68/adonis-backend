@@ -15,6 +15,8 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.string('title').notNullable()
       table.text('content').notNullable()
+      table.boolean('is_published').defaultTo(false)
+      table.string('slug').notNullable().unique()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
