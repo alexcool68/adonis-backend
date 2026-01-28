@@ -10,10 +10,10 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
-import AuthController from '#controllers/auth_controller'
-import PasswordResetController from '#controllers/password_resets_controller'
-import SystemController from '#controllers/system_controller'
-import PostsController from '#controllers/posts_controller'
+const AuthController = () => import('#controllers/auth_controller')
+const PasswordResetController = () => import('#controllers/password_resets_controller')
+const SystemController = () => import('#controllers/system_controller')
+const PostsController = () => import('#controllers/posts_controller')
 
 router.get('/', async () => {
   return { hello: 'world' }

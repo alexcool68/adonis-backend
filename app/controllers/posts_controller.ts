@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { postValidator } from '#validators/post'
+import { storeValidator, updateValidator } from '#validators/post'
 
 import Post from '#models/post'
 
@@ -15,14 +15,14 @@ export default class PostsController {
   }
 
   async store({ request, auth, response }: HttpContext) {
-    const { title, content } = await request.validateUsing(postValidator)
+    const { title, content } = await request.validateUsing(storeValidator)
     const post = await auth.user!.related('posts').create({ title, content })
     return response.created(post)
   }
 
   async update({ params, request, auth, response }: HttpContext) {
     const post = await Post.findOrFail(params.id)
-    const { title, content } = await request.validateUsing(postValidator)
+    const { title, content } = await request.validateUsing(updateValidator)
     await auth.user!.related('posts').save(post.merge({ title, content }))
     return response.ok({})
   }
