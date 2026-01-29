@@ -19,7 +19,7 @@ Content-Type: {{contentType}}
     "fullName": "Alexis LEROY"
 }
 
-###
+### LOGIN
 # @name login
 @authToken = Bearer {{login.response.body.token}}
 POST http://{{host}}/api/auth/login HTTP/1.1
@@ -30,8 +30,17 @@ Content-Type: {{contentType}}
     "password": "{{password}}"
 }
 
-###
+### CHANGE FULL NAME
+# @name changeFullName
+PATCH http://{{host}}/api/auth/change-fullname HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: {{authToken}}
 
+{
+    "fullName": "nouveau"
+}
+
+### SESSION
 # @name session
 GET http://{{host}}/api/auth/session HTTP/1.1
 Content-Type: {{contentType}}

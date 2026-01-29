@@ -49,3 +49,9 @@ export const resetPasswordValidator = vine.compile(
     // Optionnel : .confirmed() si envoi "password_confirmation" depuis le front
   })
 )
+
+export const changeFullNameValidator = vine.compile(
+  vine.object({
+    fullName: vine.string().maxLength(100).optional(),
+  })
+)

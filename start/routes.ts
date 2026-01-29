@@ -20,7 +20,12 @@ router.get('/', async () => {
   return { hello: 'world' }
 })
 
-router.get('/health', [HealthChecksController])
+router.get('/health', [HealthChecksController]).use(({ request, response }, next) => {
+  if (request.header('x-monitoring-secret') === 'some_secret_value') {
+    return next()
+  }
+  response.unauthorized({ message: 'Unauthorized access' })
+})
 
 router
   .group(() => {
@@ -66,6 +71,7 @@ router
       .group(() => {
         router.post('/logout', [AuthController, 'logout'])
         router.get('/session', [AuthController, 'session'])
+        router.patch('/change-fullname', [AuthController, 'changeFullName'])
       })
       .use(
         middleware.auth({
