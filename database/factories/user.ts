@@ -1,5 +1,5 @@
 import Factory from '@adonisjs/lucid/factories'
-import User from '#models/user'
+import User from '#models/user_model'
 import { PostFactory } from './post.js'
 
 export const UserFactory = Factory.define(User, ({ faker }) => {

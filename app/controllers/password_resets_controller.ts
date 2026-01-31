@@ -1,10 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
-import User from '#models/user'
+import User from '#models/user_model'
 import mail from '@adonisjs/mail/services/main'
 import string from '@adonisjs/core/helpers/string'
 import { DateTime } from 'luxon'
-import { forgotPasswordValidator, resetPasswordValidator } from '#validators/auth'
+import { forgotPasswordValidator, resetPasswordValidator } from '#validators/auth_validator'
 
 export default class PasswordResetController {
   async forgotPassword({ request, response }: HttpContext) {

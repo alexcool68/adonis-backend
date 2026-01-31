@@ -1,5 +1,5 @@
 import { UserFactory } from '#database/factories/user'
-import User from '#models/user'
+import User from '#models/user_model'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class SystemController {
@@ -10,7 +10,7 @@ export default class SystemController {
   }
 
   async seedUser({ response }: HttpContext) {
-    const users = await UserFactory.with('posts', 3).createMany(10)
+    const users = await UserFactory.with('posts', 2).createMany(5)
     return response.created(users)
   }
 

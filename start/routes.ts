@@ -31,26 +31,36 @@ router
   .use(middleware.logger({ run: true }))
   .prefix('/api/system')
 
+/*
+  POST
+*/
 router
   .group(() => {
+    // public
     router.get('/', [PostsController, 'index'])
-    router.get('/myPost', [PostsController, 'readByUserId'])
-    router.post('/store', [PostsController, 'store'])
-    router.patch(':id', [PostsController, 'update']).where('id', {
+    router.get(':id', [PostsController, 'show']).where('id', {
       match: /^[0-9]+$/,
       cast: (value) => Number(value),
     })
-
-    router.delete(':id', [PostsController, 'destroy']).where('id', {
-      match: /^[0-9]+$/,
-      cast: (value) => Number(value),
-    })
+    // private
+    router
+      .group(() => {
+        router.post('/store', [PostsController, 'store'])
+        router.patch(':id', [PostsController, 'update']).where('id', {
+          match: /^[0-9]+$/,
+          cast: (value) => Number(value),
+        })
+        router.delete(':id', [PostsController, 'destroy']).where('id', {
+          match: /^[0-9]+$/,
+          cast: (value) => Number(value),
+        })
+      })
+      .use(
+        middleware.auth({
+          guards: ['api'],
+        })
+      )
   })
-  .use(
-    middleware.auth({
-      guards: ['api'],
-    })
-  )
   .use(middleware.logger({ run: true }))
   .prefix('/api/posts')
 
