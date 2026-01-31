@@ -63,7 +63,9 @@ router
   })
   .use(middleware.logger({ run: true }))
   .prefix('/api/posts')
-
+/*
+  AUTH
+*/
 router
   .group(() => {
     // Routes publiques
@@ -77,6 +79,7 @@ router
         router.post('/logout', [AuthController, 'logout'])
         router.get('/session', [AuthController, 'session'])
         router.patch('/change-fullname', [AuthController, 'changeFullName'])
+        router.patch('/update-password', [AuthController, 'updatePassword'])
       })
       .use(
         middleware.auth({

@@ -1,14 +1,15 @@
 import User from '#models/user_model'
 import {
-  loginValidator,
-  registerValidator,
-  changeFullNameValidator,
+  loginAuthValidator,
+  registerAuthValidator,
+  changeFullNameAuthValidator,
+  updatePasswordValidator,
 } from '#validators/auth_validator'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class AuthController {
   async register({ request, response }: HttpContext) {
-    const payload = await request.validateUsing(registerValidator)
+    const payload = await request.validateUsing(registerAuthValidator)
 
     const user = await User.create(payload)
 
@@ -23,7 +24,7 @@ export default class AuthController {
 
   async login({ request, response, auth }: HttpContext) {
     try {
-      const { email, password } = await request.validateUsing(loginValidator)
+      const { email, password } = await request.validateUsing(loginAuthValidator)
       const user = await User.verifyCredentials(email, password)
       return await auth.use('api').createToken(user)
     } catch (error) {
@@ -48,8 +49,28 @@ export default class AuthController {
   }
 
   async changeFullName({ request, auth, response }: HttpContext) {
-    const { fullName } = await request.validateUsing(changeFullNameValidator)
+    const { fullName } = await request.validateUsing(changeFullNameAuthValidator)
     await auth.user?.merge({ fullName }).save()
+    return response.ok({})
+  }
+
+  async updatePassword({ request, response, auth, session }: HttpContext) {
+    // Vérifier que l'utilisateur est bien connecté
+    const user = auth.user!
+
+    // Validation avec injection des métadonnées
+    const payload = await request.validateUsing(updatePasswordValidator, {
+      meta: {
+        user: user, // C'est ici qu'on passe l'utilisateur à la règle
+      },
+    })
+
+    // Si on arrive ici, l'ancien mot de passe est valide !
+
+    // Mise à jour du mot de passe
+    user.password = payload.new_password
+    await user.save()
+
     return response.ok({})
   }
 }
