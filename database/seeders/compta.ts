@@ -89,14 +89,14 @@ export default class MainSeeder extends BaseSeeder {
       rank: 10,
     })
 
-    const fileEntreeGJ0201 = await StepFile.create({
+    await StepFile.create({
       stepId: stepGJ02001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ020001',
       defaultCopybook: 'CGE008',
     })
-    const fileSortieGJ0201 = await StepFile.create({
+    await StepFile.create({
       stepId: stepGJ02001.id,
       direction: 'OUT',
       logicalName: 'SORTIE',
@@ -122,7 +122,7 @@ export default class MainSeeder extends BaseSeeder {
       movementId: movDP01.id,
       stepId: step001.id,
     })
-    const mvtStep2 = await MovementStep.create({
+    await MovementStep.create({
       movementId: movDP01.id,
       stepId: step002.id,
     })
