@@ -9,8 +9,8 @@ export const storeChainCatalogValidator = vine.compile(
 
 export const storeStepCatalogValidator = vine.compile(
   vine.object({
-    code: vine.string().maxLength(10),
-    description: vine.string().optional(),
+    name: vine.string().maxLength(10),
+    rank: vine.number(),
   })
 )
 
