@@ -30,42 +30,42 @@ export default class MainSeeder extends BaseSeeder {
     })
 
     // Définition des fichiers possibles pour ce step
-    const fileEntree01 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ000001',
       defaultCopybook: 'CGE000',
     })
-    const fileEntree02 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ000002',
       defaultCopybook: 'CGE000',
     })
-    const fileEntree03 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ000003',
       defaultCopybook: 'CGE000',
     })
-    const fileEntree04 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ000004',
       defaultCopybook: 'CGE000',
     })
-    const fileEntree05 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ000005',
       defaultCopybook: 'CGE000',
     })
-    const fileEntree07 = await StepFile.create({
+    await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
