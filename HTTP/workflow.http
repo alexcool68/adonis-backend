@@ -1,0 +1,9 @@
+@hostname = localhost
+@port = 3333
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+### SHOW
+# @name workflow
+GET http://{{host}}/api/workflows/GE00 HTTP/1.1
+Content-Type: {{contentType}}

@@ -15,12 +15,35 @@ const AuthController = () => import('#controllers/auth_controller')
 const PasswordResetController = () => import('#controllers/password_resets_controller')
 const SystemController = () => import('#controllers/system_controller')
 const PostsController = () => import('#controllers/posts_controller')
+const WorkflowsController = () => import('#controllers/compta/workflows_controller')
+const CatalogsController = () => import('#controllers/compta/catalogs_controller')
+const ConfigurationsController = () => import('#controllers/compta/configurations_controller')
 
 router.get('/', async () => {
   return { hello: 'world' }
 })
 
 router.get('/health', [HealthChecksController])
+
+router
+  .group(() => {
+    router.get('/workflows/:code', [WorkflowsController, 'show']).prefix('/api')
+    // Lecture (Ce qu'on a fait avant)
+    router.get('/workflows/:code', [WorkflowsController, 'show'])
+
+    // CATALOGUE (Administration JCL)
+    router.post('/chains', [CatalogsController, 'storeChain']) // Créer GJ01
+    router.post('/chains/:chainId/steps', [CatalogsController, 'storeStep']) // Ajouter Step à GJ01
+    router.post('/steps/:stepId/files', [CatalogsController, 'storeStepFile']) // Ajouter Fichier au Step
+
+    // CONFIGURATION (Logique Métier)
+    router.post('/movements', [ConfigurationsController, 'storeMovement']) // Créer GE00
+    router.post('/links/chain', [ConfigurationsController, 'linkChain']) // Lier GE00 -> GJ01
+    router.post('/links/step', [ConfigurationsController, 'activateStep']) // Activer Step
+    router.post('/links/file', [ConfigurationsController, 'configureFile']) // Configurer Fichier
+    router.post('/rules', [ConfigurationsController, 'addRule']) // Ajouter Règle
+  })
+  .prefix('api')
 
 router
   .group(() => {
