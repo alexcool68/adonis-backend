@@ -4,11 +4,11 @@ import User from '#models/user_model'
 import mail from '@adonisjs/mail/services/main'
 import string from '@adonisjs/core/helpers/string'
 import { DateTime } from 'luxon'
-import { forgotPasswordValidator, resetPasswordValidator } from '#validators/auth_validator'
+import { forgotPasswordAuthValidator, resetPasswordAuthValidator } from '#validators/auth_validator'
 
 export default class PasswordResetController {
   async forgotPassword({ request, response }: HttpContext) {
-    const { email } = await request.validateUsing(forgotPasswordValidator)
+    const { email } = await request.validateUsing(forgotPasswordAuthValidator)
 
     const user = await User.findBy('email', email)
 
@@ -35,7 +35,7 @@ export default class PasswordResetController {
   }
 
   async resetPassword({ request, response }: HttpContext) {
-    const { token, password } = await request.validateUsing(resetPasswordValidator)
+    const { token, password } = await request.validateUsing(resetPasswordAuthValidator)
 
     const record = await db
       .from('password_reset_tokens')

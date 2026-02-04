@@ -54,7 +54,7 @@ export default class AuthController {
     return response.ok({})
   }
 
-  async updatePassword({ request, response, auth, session }: HttpContext) {
+  async updatePassword({ request, response, auth }: HttpContext) {
     // Vérifier que l'utilisateur est bien connecté
     const user = auth.user!
 
