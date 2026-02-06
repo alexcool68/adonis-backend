@@ -10,7 +10,7 @@ import StepFile from '#models/compta/stepfile_model'
 import Movement from '#models/compta/movement_model'
 
 export default class CatalogsController {
-  // Créer une Chaine
+  // Handle Chain
   public async storeChain({ request, response }: HttpContext) {
     const payload = await request.validateUsing(storeChainCatalogValidator)
     const chain = await Chain.create(payload)
@@ -18,12 +18,16 @@ export default class CatalogsController {
   }
 
   public async destroyChain({ params, response }: HttpContext) {
-    const chain = await Chain.findOrFail(params.id)
+    const chain = await Chain.findOrFail(params.chainId)
     await chain.delete()
     return response.noContent()
   }
 
-  // Ajouter un Step dans une Chaine
+  public async showChains({}: HttpContext) {
+    return Chain.query().preload('steps', (q) => q.orderBy('rank').preload('possibleFiles'))
+  }
+
+  // Handle Step
   public async storeStep({ request, response, params }: HttpContext) {
     const chainId = params.chainId
     const payload = await request.validateUsing(storeStepCatalogValidator)
@@ -34,7 +38,14 @@ export default class CatalogsController {
     return response.created(step)
   }
 
-  // Ajouter un Fichier à un Step
+  public async destroyStep({ params, response }: HttpContext) {
+    const { stepId } = params
+    const step = await Step.firstOrFail(stepId)
+    await step.delete()
+    return response.noContent()
+  }
+
+  // Handle StepFile
   public async storeStepFile({ request, response, params }: HttpContext) {
     const stepId = params.stepId
 
@@ -47,10 +58,18 @@ export default class CatalogsController {
     return response.created(file)
   }
 
-  public async showChains({}: HttpContext) {
-    return Chain.query().preload('steps', (q) => q.orderBy('rank').preload('possibleFiles'))
+  public async destroyStepFile({ params, response }: HttpContext) {
+    const { fileId, stepId } = params
+
+    const stepFile = await StepFile.query()
+      .where('id', fileId)
+      .andWhere('stepId', stepId)
+      .firstOrFail()
+    await stepFile.delete()
+    return response.noContent()
   }
 
+  // Handle Movement à déplacer
   public async showMovements({}: HttpContext) {
     return Movement.query()
   }

@@ -31,12 +31,14 @@ router
     router.get('/workflows/:code', [WorkflowsController, 'show'])
 
     // CATALOGUE (Administration JCL)
-    router.post('/chains', [CatalogsController, 'storeChain']) // Créer GJ01
+    router.post('/chains', [CatalogsController, 'storeChain'])
+    router.delete('/chains/:chainId', [CatalogsController, 'destroyChain'])
     router.get('/chains', [CatalogsController, 'showChains'])
-    router.get('/movements', [CatalogsController, 'showMovements']) // a déplacer ?
-    router.delete('/chains/:id', [CatalogsController, 'destroyChain'])
-    router.post('/chains/:chainId/steps', [CatalogsController, 'storeStep']) // Ajouter Step à GJ01
-    router.post('/steps/:stepId/files', [CatalogsController, 'storeStepFile']) // Ajouter Fichier au Step
+    router.post('/chains/:chainId/steps', [CatalogsController, 'storeStep'])
+    router.delete('/steps/:stepId', [CatalogsController, 'destroyStep'])
+    router.post('/steps/:stepId/files', [CatalogsController, 'storeStepFile'])
+    router.delete('/steps/:stepId/files/:fileId', [CatalogsController, 'destroyStepFile'])
+    router.get('/movements', [CatalogsController, 'showMovements'])
 
     // CONFIGURATION (Logique Métier)
     router.post('/movements', [ConfigurationsController, 'storeMovement']) // Créer GE00
