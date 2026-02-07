@@ -21,6 +21,7 @@ export default class ConfigurationsController {
     return response.created(movement)
   }
 
+  // Show un mouvement
   public async showMovements({ response }: HttpContext) {
     const movements = await Movement.query()
       .orderBy('code', 'asc')
