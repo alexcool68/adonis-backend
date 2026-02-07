@@ -16,7 +16,7 @@ export default class StepFile extends BaseModel {
   declare direction: 'IN' | 'OUT'
 
   @column()
-  declare logicalName: string // DDNAME
+  declare logicalName: string // EXEX.SPA.DP010003
 
   @column()
   declare defaultPhysicalName: string

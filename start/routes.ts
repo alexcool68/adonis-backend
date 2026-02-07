@@ -27,8 +27,9 @@ router.get('/health', [HealthChecksController])
 
 router
   .group(() => {
-    // Lecture (Ce qu'on a fait avant)
+    // Lecture (Ce qu'on a fait avant) via frontend
     router.get('/workflows/:code', [WorkflowsController, 'show'])
+    router.get('/movements', [CatalogsController, 'showMovements'])
 
     // CATALOGUE (Administration JCL)
     router.post('/chains', [CatalogsController, 'storeChain'])
@@ -38,13 +39,15 @@ router
     router.delete('/steps/:stepId', [CatalogsController, 'destroyStep'])
     router.post('/steps/:stepId/files', [CatalogsController, 'storeStepFile'])
     router.delete('/steps/:stepId/files/:fileId', [CatalogsController, 'destroyStepFile'])
-    router.get('/movements', [CatalogsController, 'showMovements'])
+    router.get('/configurations/movements', [ConfigurationsController, 'showMovements'])
 
     // CONFIGURATION (Logique Métier)
     router.post('/movements', [ConfigurationsController, 'storeMovement']) // Créer GE00
 
     router.post('/links/chain', [ConfigurationsController, 'linkChain']) // Lier GE00 -> GJ01
+    router.delete('/links/chain/:id', [ConfigurationsController, 'unlinkChain'])
     router.post('/links/step', [ConfigurationsController, 'activateStep']) // Activer Step
+    router.delete('/links/step/:id', [ConfigurationsController, 'unlinkStep'])
     router.post('/links/file', [ConfigurationsController, 'configureFile']) // Configurer Fichier
     router.post('/rules', [ConfigurationsController, 'addRule']) // Ajouter Règle
   })

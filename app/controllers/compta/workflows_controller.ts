@@ -5,7 +5,6 @@ import Movement from '#models/compta/movement_model'
 export default class WorkflowsController {
   public async show({ params, response }: HttpContext) {
     const movementCode = params.code // ex: "GE00"
-    console.log(movementCode)
 
     try {
       // ÉTAPE 1 : On récupère d'abord l'objet principal

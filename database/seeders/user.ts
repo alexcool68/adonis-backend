@@ -11,6 +11,12 @@ export default class MainSeeder extends BaseSeeder {
       fullName: 'Alexis LEROY',
       isAdmin: true,
     })
+    await User.create({
+      email: 'demo@demo.com',
+      password: '123456789',
+      fullName: 'Demo Account',
+      isAdmin: true,
+    })
     await UserFactory.with('posts', 2).createMany(5)
   }
 }

@@ -33,42 +33,42 @@ export default class MainSeeder extends BaseSeeder {
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 01',
       defaultPhysicalName: 'GJ000001',
       defaultCopybook: 'CGE000',
     })
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 02',
       defaultPhysicalName: 'GJ000002',
       defaultCopybook: 'CGE000',
     })
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 03',
       defaultPhysicalName: 'GJ000003',
       defaultCopybook: 'CGE000',
     })
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 04',
       defaultPhysicalName: 'GJ000004',
       defaultCopybook: 'CGE000',
     })
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 05',
       defaultPhysicalName: 'GJ000005',
       defaultCopybook: 'CGE000',
     })
     await StepFile.create({
       stepId: step001.id,
       direction: 'IN',
-      logicalName: 'ENTREE',
+      logicalName: 'ENTREE 06',
       defaultPhysicalName: 'GJ000007',
       defaultCopybook: 'CGE000',
     })
@@ -76,7 +76,7 @@ export default class MainSeeder extends BaseSeeder {
     const fileSortie = await StepFile.create({
       stepId: step001.id,
       direction: 'OUT',
-      logicalName: 'BECT',
+      logicalName: 'SORTIE 01',
       defaultPhysicalName: 'GJ010001',
       defaultCopybook: 'CFGJ008',
     })
@@ -108,7 +108,10 @@ export default class MainSeeder extends BaseSeeder {
     // ------------------------------------------------
 
     // Création du Mouvement GE00
-    const movDP01 = await Movement.create({ code: 'DP01', description: 'Rattrapage Mvt DP01' })
+    const movDP01 = await Movement.create({
+      code: 'DP01',
+      description: 'Rattrapage mouvement DP01',
+    })
 
     // A. On dit que DP01 passe par GJ01
     await MovementChain.create({
