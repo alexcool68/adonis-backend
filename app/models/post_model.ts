@@ -69,7 +69,7 @@ export default class Post extends BaseModel {
       if (count > 10) break // sécurité
     }
 
-    return candidate || `${slug}-${suffix.toString(36)}`
+    return `${suffix.toString(36)}-${candidate}` || `${slug}-${suffix.toString(36)}`
   }
 
   // Méthode helper
