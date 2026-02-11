@@ -35,7 +35,7 @@ export default class ConfigurationsController {
           // (Car on veut afficher même ceux qui sont inactifs/grisés)
           chainQuery.preload('steps', (stepQuery) => {
             stepQuery.orderBy('rank', 'asc')
-
+            stepQuery.preload('possibleFiles')
             // 5. On regarde s'il existe une liaison "Active" pour ce mouvement
             // Astuce : on filtre sur le mouvement parent pour savoir si c'est actif
             stepQuery.preload('movementSteps', (msQuery) => {
@@ -45,6 +45,7 @@ export default class ConfigurationsController {
               // Mais pour l'admin, charger les configs est acceptable.
               msQuery.preload('files', (fQuery) => {
                 fQuery.preload('rules')
+                fQuery.preload('definition') // On charge la définition du fichier depuis le catalogue
               })
             })
           })
@@ -68,19 +69,36 @@ export default class ConfigurationsController {
             steps: chain.steps.map((step) => {
               // On cherche si une config existe pour ce Mouvement ID précis
               const activeConfig = step.movementSteps.find((ms) => ms.movementId === m.id)
-
+              const possibleFiles = step.possibleFiles
+              // return {
+              //   id: step.id,
+              //   name: step.name,
+              //   rank: step.rank,
+              //   isActive: !!activeConfig, // True si configuré
+              //   movementStepId: activeConfig?.id,
+              //   files:
+              //     activeConfig?.files.map((f) => ({
+              //       id: f.id,
+              //       stepFileId: f.stepFileId,
+              //       // On pourrait récupérer le logicalName via un preload supplémentaire si besoin
+              //       // Pour l'instant on renvoie l'ID
+              //       rules: f.rules,
+              //     })) || [],
+              // }
               return {
                 id: step.id,
                 name: step.name,
                 rank: step.rank,
                 isActive: !!activeConfig, // True si configuré
                 movementStepId: activeConfig?.id,
+                possibleFiles: possibleFiles,
                 files:
                   activeConfig?.files.map((f) => ({
                     id: f.id,
                     stepFileId: f.stepFileId,
-                    // On pourrait récupérer le logicalName via un preload supplémentaire si besoin
-                    // Pour l'instant on renvoie l'ID
+                    overridePhysicalName: f.overridePhysicalName,
+                    logicalName: f.definition.logicalName,
+                    defaultPhysicalName: f.definition.defaultPhysicalName,
                     rules: f.rules,
                   })) || [],
               }
