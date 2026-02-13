@@ -49,6 +49,10 @@ router
     router.post('/links/step', [ConfigurationsController, 'activateStep']) // Activer Step
     router.delete('/links/step/:id', [ConfigurationsController, 'unlinkStep'])
     router.post('/links/file', [ConfigurationsController, 'configureFile']) // Configurer Fichier
+    router.delete('/links/step/:movementStepId/files/:stepFileId', [
+      ConfigurationsController,
+      'unconfigureFile',
+    ])
     router.post('/rules', [ConfigurationsController, 'addRule']) // Ajouter Règle
   })
   .use(middleware.logger({ run: true }))

@@ -31,6 +31,12 @@ export const configureFileConfigurationValidator = vine.compile(
     isMonitored: vine.boolean(),
   })
 )
+// export const unConfigureFileConfigurationValidator = vine.compile(
+//   vine.object({
+//     movementStepId: vine.number(), // ID retourné par l'étape 3
+//     stepFileId: vine.number(), // ID du fichier catalogue
+//   })
+// )
 
 export const addRuleConfigurationValidator = vine.compile(
   vine.object({

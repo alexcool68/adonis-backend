@@ -5,6 +5,7 @@ import {
   activateStepConfigurationValidator,
   configureFileConfigurationValidator,
   addRuleConfigurationValidator,
+  unConfigureFileConfigurationValidator,
 } from '#validators/compta/configuration_validator'
 import Movement from '#models/compta/movement_model'
 import Rule from '#models/compta/rule_model'
@@ -117,7 +118,7 @@ export default class ConfigurationsController {
     const link = await MovementChain.create(payload)
     return response.created(link)
   }
-
+  // Supprime un Mouvement à une Chaine
   public async unlinkChain({ params, response }: HttpContext) {
     // On supprime la ligne dans la table de liaison movement_chains
     // Attention : Assure-toi que ta BDD est en "ON DELETE CASCADE" pour
@@ -152,6 +153,16 @@ export default class ConfigurationsController {
 
     const config = await MovementStepFile.create(payload)
     return response.created(config)
+  }
+
+  // Configurer un Fichier (Surcharge/Activation)
+  public async unconfigureFile({ params, response }: HttpContext) {
+    const stepFileId = params.stepFileId
+    const movementStepId = params.movementStepId
+
+    const file = await MovementStepFile.findOrFail(stepFileId, movementStepId)
+    await file.delete()
+    return response.noContent()
   }
 
   // Ajouter une Règle (Alerte)
