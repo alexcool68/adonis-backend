@@ -5,7 +5,6 @@ import {
   activateStepConfigurationValidator,
   configureFileConfigurationValidator,
   addRuleConfigurationValidator,
-  unConfigureFileConfigurationValidator,
 } from '#validators/compta/configuration_validator'
 import Movement from '#models/compta/movement_model'
 import Rule from '#models/compta/rule_model'
