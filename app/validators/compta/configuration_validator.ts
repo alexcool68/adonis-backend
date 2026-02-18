@@ -1,5 +1,6 @@
 import vine from '@vinejs/vine'
 
+// ok
 export const storeMovementConfigurationValidator = vine.compile(
   vine.object({
     code: vine.string().maxLength(10), // "GE00"
@@ -7,7 +8,8 @@ export const storeMovementConfigurationValidator = vine.compile(
   })
 )
 
-export const linkChainConfigurationValidator = vine.compile(
+// ok
+export const addMovementChainConfigurationValidator = vine.compile(
   vine.object({
     movementId: vine.number(),
     chainId: vine.number(),
@@ -15,32 +17,29 @@ export const linkChainConfigurationValidator = vine.compile(
   })
 )
 
-export const activateStepConfigurationValidator = vine.compile(
+// ok
+export const addMovementStepConfigurationValidator = vine.compile(
   vine.object({
     movementId: vine.number(),
     stepId: vine.number(),
   })
 )
 
-export const configureFileConfigurationValidator = vine.compile(
+// ok
+export const addMovementFileConfigurationValidator = vine.compile(
   vine.object({
-    movementStepId: vine.number(), // ID retourné par l'étape 3
-    stepFileId: vine.number(), // ID du fichier catalogue
+    movementStepId: vine.number(),
+    fileId: vine.number(),
     overridePhysicalName: vine.string().optional(),
     overrideCopybook: vine.string().optional(),
     isMonitored: vine.boolean(),
   })
 )
-// export const unConfigureFileConfigurationValidator = vine.compile(
-//   vine.object({
-//     movementStepId: vine.number(), // ID retourné par l'étape 3
-//     stepFileId: vine.number(), // ID du fichier catalogue
-//   })
-// )
 
+// ok
 export const addRuleConfigurationValidator = vine.compile(
   vine.object({
-    movementStepFileId: vine.number(), // ID retourné par l'étape 4
+    movementFileId: vine.number(),
     message: vine.string(),
     targetField: vine.string().optional(),
     technicalDetails: vine.string().optional(),

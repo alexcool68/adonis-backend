@@ -23,7 +23,7 @@ export default class WorkflowsController {
             })
             stepQuery.orderBy('rank', 'asc')
 
-            stepQuery.preload('possibleFiles')
+            stepQuery.preload('files')
 
             // Chargement de la config spécifique
             stepQuery.preload('movementSteps', (msQuery) => {
@@ -65,9 +65,9 @@ export default class WorkflowsController {
         const config = step.movementSteps[0]
 
         // --- LA FUSION DES FICHIERS ---
-        const finalFiles = step.possibleFiles.map((catalogFile) => {
+        const finalFiles = step.files.map((catalogFile) => {
           // Cherche si ce fichier catalogue a une config spécifique
-          const specificConfig = config?.files.find((f) => f.stepFileId === catalogFile.id)
+          const specificConfig = config?.files.find((f) => f.fileId === catalogFile.id)
 
           // Est-ce qu'on doit surveiller ce fichier ? (Par défaut true, sauf si dit false)
           const isMonitored = specificConfig ? specificConfig.isMonitored : true

@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
 
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 
 import Step from './step_model.js'
+import MovementFile from './movement_file_model.js'
 
-export default class StepFile extends BaseModel {
+export default class File extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
@@ -16,7 +17,7 @@ export default class StepFile extends BaseModel {
   declare direction: 'IN' | 'OUT'
 
   @column()
-  declare logicalName: string // EXEX.SPA.DP010003
+  declare logicalName: string
 
   @column()
   declare defaultPhysicalName: string
@@ -35,4 +36,7 @@ export default class StepFile extends BaseModel {
    */
   @belongsTo(() => Step)
   declare step: BelongsTo<typeof Step>
+
+  @hasMany(() => MovementFile)
+  declare configurations: HasMany<typeof MovementFile>
 }

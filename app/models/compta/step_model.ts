@@ -4,7 +4,7 @@ import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 
 import Chain from './chain_model.js'
-import StepFile from './stepfile_model.js'
+import File from './file_model.js'
 import MovementStep from './movement_step_model.js'
 
 export default class Step extends BaseModel {
@@ -33,8 +33,8 @@ export default class Step extends BaseModel {
   @belongsTo(() => Chain)
   declare chain: BelongsTo<typeof Chain>
 
-  @hasMany(() => StepFile)
-  declare possibleFiles: HasMany<typeof StepFile>
+  @hasMany(() => File)
+  declare files: HasMany<typeof File>
 
   @hasMany(() => MovementStep)
   declare movementSteps: HasMany<typeof MovementStep>

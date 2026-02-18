@@ -3,14 +3,14 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
-import MovementStepFile from './movement_stepfile_model.js'
+import MovementFile from './movement_file_model.js'
 
 export default class Rule extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare movementStepFileId: number
+  declare movementFileId: number
 
   @column()
   declare message: string
@@ -34,6 +34,6 @@ export default class Rule extends BaseModel {
    * Relations
    */
 
-  @belongsTo(() => MovementStepFile)
-  declare fileConfig: BelongsTo<typeof MovementStepFile>
+  @belongsTo(() => MovementFile)
+  declare fileConfig: BelongsTo<typeof MovementFile>
 }

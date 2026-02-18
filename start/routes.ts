@@ -16,8 +16,15 @@ const PasswordResetController = () => import('#controllers/password_resets_contr
 const SystemController = () => import('#controllers/system_controller')
 const PostsController = () => import('#controllers/posts_controller')
 const WorkflowsController = () => import('#controllers/compta/workflows_controller')
-const CatalogsController = () => import('#controllers/compta/catalogs_controller')
-const ConfigurationsController = () => import('#controllers/compta/configurations_controller')
+
+//v1
+const ChainsController = () => import('#controllers/compta/v1/chains_controller')
+const StepsController = () => import('#controllers/compta/v1/steps_controller')
+const FilesController = () => import('#controllers/compta/v1/files_controller')
+const MovementsController = () => import('#controllers/compta/v1/movements_controller')
+
+const CatalogsController = () => import('#controllers/compta/v1/catalogs_controller')
+const ConfigurationsController = () => import('#controllers/compta/v1/configurations_controller')
 
 router.get('/', async () => {
   return { hello: 'world' }
@@ -25,35 +32,69 @@ router.get('/', async () => {
 
 router.get('/health', [HealthChecksController])
 
+// V1
 router
   .group(() => {
-    // Lecture (Ce qu'on a fait avant) via frontend
-    router.get('/workflows/:code', [WorkflowsController, 'show'])
-    router.get('/movements', [CatalogsController, 'showMovements'])
+    router.get('/formatted-chains', [CatalogsController, 'showFormattedChains'])
+    router.get('/formatted-movements', [ConfigurationsController, 'showFormattedMovements'])
 
-    // CATALOGUE (Administration JCL)
-    router.post('/chains', [CatalogsController, 'storeChain'])
-    router.delete('/chains/:chainId', [CatalogsController, 'destroyChain'])
-    router.get('/chains', [CatalogsController, 'showChains'])
-    router.post('/chains/:chainId/steps', [CatalogsController, 'storeStep'])
-    router.delete('/steps/:stepId', [CatalogsController, 'destroyStep'])
-    router.post('/steps/:stepId/files', [CatalogsController, 'storeStepFile'])
-    router.delete('/steps/:stepId/files/:fileId', [CatalogsController, 'destroyStepFile'])
-    router.get('/configurations/movements', [ConfigurationsController, 'showMovements'])
+    router.post('/rules', [ConfigurationsController, 'addRule'])
+    router.delete('/rules/:ruleId', [ConfigurationsController, 'deleteRule'])
 
-    // CONFIGURATION (Logique Métier)
-    router.post('/movements', [ConfigurationsController, 'storeMovement']) // Créer GE00
-
-    router.post('/links/chain', [ConfigurationsController, 'linkChain']) // Lier GE00 -> GJ01
-    router.delete('/links/chain/:id', [ConfigurationsController, 'unlinkChain'])
-    router.post('/links/step', [ConfigurationsController, 'activateStep']) // Activer Step
-    router.delete('/links/step/:id', [ConfigurationsController, 'unlinkStep'])
-    router.post('/links/file', [ConfigurationsController, 'configureFile']) // Configurer Fichier
-    router.delete('/links/step/:movementStepId/files/:stepFileId', [
+    // attach and detach a chain to a movement
+    router.post('/movement/chain', [ConfigurationsController, 'attachMovementChain'])
+    router.delete('/movement/:movementId/chain/:chainId', [
       ConfigurationsController,
-      'unconfigureFile',
+      'detachMovementChain',
     ])
-    router.post('/rules', [ConfigurationsController, 'addRule']) // Ajouter Règle
+
+    // attach and detach a step to a movement
+    router.post('/movement/step', [ConfigurationsController, 'attachMovementStep'])
+    router.delete('/movement/:movementId/step/:stepId', [
+      ConfigurationsController,
+      'detachMovementStep',
+    ])
+
+    // attach and detach a file to a movement
+    router.post('/movement/file', [ConfigurationsController, 'attachMovementFile'])
+    router.delete('/movement/file/:movementFileId', [
+      ConfigurationsController,
+      'detachMovementFile',
+    ])
+
+    router.group(() => {
+      router.post('/movements', [MovementsController, 'storeMovement'])
+      router.delete('/movements/:chainId', [MovementsController, 'destroyMovement'])
+      router.get('/movements', [MovementsController, 'showMovements'])
+      router.patch('/movements', [MovementsController, 'updateMovement'])
+    })
+    router.group(() => {
+      router.post('/chains', [ChainsController, 'storeChain'])
+      router.delete('/chains/:chainId', [ChainsController, 'destroyChain'])
+      router.get('/chains', [ChainsController, 'showChains'])
+      router.patch('/chains', [ChainsController, 'updateChain'])
+    })
+    router.group(() => {
+      router.post('/steps', [StepsController, 'storeStep'])
+      router.delete('/steps/:stepId', [StepsController, 'destroyStep'])
+      router.get('/steps', [StepsController, 'showSteps'])
+      router.patch('/steps', [StepsController, 'updateStep'])
+    })
+    router.group(() => {
+      router.post('/files', [FilesController, 'storeFile'])
+      router.delete('/files/:fileId', [FilesController, 'destroyFile'])
+      router.get('/files', [FilesController, 'showFiles'])
+      router.patch('/files', [FilesController, 'updateFile'])
+    })
+  })
+  .use(middleware.logger({ run: true }))
+  .prefix('api/v1/')
+
+// V0
+router
+  .group(() => {
+    // Lecture (Ce qu'on a fait avant) via frontend, à migrer ?
+    router.get('/workflows/:code', [WorkflowsController, 'show'])
   })
   .use(middleware.logger({ run: true }))
   .prefix('api')

@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('movements')
         .onDelete('CASCADE')
       table.integer('chain_id').unsigned().references('id').inTable('chains').onDelete('CASCADE')
-      table.integer('execution_order').notNullable() // 10, 20...
+      table.integer('execution_order').notNullable()
       table.unique(['movement_id', 'chain_id'])
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -33,7 +33,7 @@ export default class extends BaseSchema {
       table.timestamp('updated_at')
     })
 
-    this.schema.createTable('movement_step_files', (table) => {
+    this.schema.createTable('movement_files', (table) => {
       table.increments('id')
       table
         .integer('movement_step_id')
@@ -41,15 +41,10 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('movement_steps')
         .onDelete('CASCADE')
-      table
-        .integer('step_file_id')
-        .unsigned()
-        .references('id')
-        .inTable('step_files')
-        .onDelete('CASCADE')
+      table.integer('file_id').unsigned().references('id').inTable('files').onDelete('CASCADE')
       table.string('override_physical_name').nullable()
       table.string('override_copybook').nullable()
-      table.boolean('is_monitored').defaultTo(true) // Le fichier doit-il être vérifié ?
+      table.boolean('is_monitored').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
@@ -57,14 +52,14 @@ export default class extends BaseSchema {
     this.schema.createTable('rules', (table) => {
       table.increments('id')
       table
-        .integer('movement_step_file_id')
+        .integer('movement_file_id')
         .unsigned()
         .references('id')
-        .inTable('movement_step_files')
+        .inTable('movement_files')
         .onDelete('CASCADE')
       table.string('message').notNullable()
-      table.string('target_field').nullable() // ex: "CODE-PRODUIT"
-      table.string('technical_details').nullable() // ex: "Pos 10, Len 2"
+      table.string('target_field').nullable()
+      table.string('technical_details').nullable()
       table.text('fix_instruction').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
@@ -73,7 +68,7 @@ export default class extends BaseSchema {
 
   async down() {
     this.schema.dropTable('rules')
-    this.schema.dropTable('movement_step_files')
+    this.schema.dropTable('movement_files')
     this.schema.dropTable('movement_steps')
     this.schema.dropTable('movement_chains')
   }

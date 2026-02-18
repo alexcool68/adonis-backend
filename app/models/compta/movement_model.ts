@@ -3,8 +3,9 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
-import MovementChain from './movement_chain.js'
 import Chain from './chain_model.js'
+import Step from './step_model.js'
+import MovementChain from './movement_chain.js'
 import MovementStep from './movement_step_model.js'
 
 export default class Movement extends BaseModel {
@@ -38,4 +39,10 @@ export default class Movement extends BaseModel {
     pivotColumns: ['execution_order'],
   })
   declare chains: ManyToMany<typeof Chain>
+
+  @manyToMany(() => Step, {
+    pivotTable: 'movement_steps',
+    pivotColumns: [],
+  })
+  declare steps: ManyToMany<typeof Step>
 }

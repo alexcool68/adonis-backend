@@ -1,0 +1,66 @@
+@hostname = localhost
+@port = 3333
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@lastPost = 0
+# Existe déjà : mvt 1 chain 1 execution 10
+# MovementId     : 1 DP01
+# ChainId        : 2 GJ02
+# executionOrder :
+# /movement/:movementId/chain/:chainId
+
+### ATTACH A MOUVEMENT CHAIN
+POST http://{{host}}/api/v1/movement/chain HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "movementId": 1,
+    "chainId": 1,
+    "executionOrder": 10
+}
+
+### DETACH A MOUVEMENT CHAIN
+# /movement/:movementId/chain/:chainId
+DELETE  http://{{host}}/api/v1/movement/1/chain/2 HTTP/1.1
+Content-Type: {{contentType}}
+
+############################
+# StepID
+#  1 GJ010010
+#  2 GJ010020
+#  3 GJ020010
+# MovementId 1
+### ATTACH A MOUVEMENT STEP
+POST http://{{host}}/api/v1/movement/step HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "movementId": 1,
+    "stepId": 4
+}
+
+### DETACH A MOUVEMENT STEP
+# /movement/:movementId/step/:stepId
+DELETE  http://{{host}}/api/v1/movement/1/step/3 HTTP/1.1
+Content-Type: {{contentType}}
+
+############################
+# FileID
+#  1 GJ010010
+#  2 GJ010020
+# MovementId 1
+# StepId 1/2
+### ATTACH A MOUVEMENT STEP
+POST http://{{host}}/api/v1/movement/step HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "movementId": 1,
+    "stepId": 4
+}
+
+### DETACH A MOUVEMENT STEP
+# /movement/:movementId/step/:stepId
+DELETE  http://{{host}}/api/v1/movement/1/step/3 HTTP/1.1
+Content-Type: {{contentType}}

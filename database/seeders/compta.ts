@@ -4,16 +4,14 @@ import Chain from '#models/compta/chain_model'
 import MovementChain from '#models/compta/movement_chain'
 import Movement from '#models/compta/movement_model'
 import MovementStep from '#models/compta/movement_step_model'
-import MovementStepFile from '#models/compta/movement_stepfile_model'
+import MovementFile from '#models/compta/movement_file_model'
 import Rule from '#models/compta/rule_model'
 import Step from '#models/compta/step_model'
-import StepFile from '#models/compta/stepfile_model'
+import File from '#models/compta/file_model'
 
 export default class MainSeeder extends BaseSeeder {
   public async run() {
-    // 1. LE CATALOGUE (Ce qui existe dans le JCL)
-    // ------------------------------------------------
-
+    // 1. LE CATALOGUE
     // Création de la chaine GJ01
     const chainGJ01 = await Chain.create({ code: 'GJ01', description: 'Chaine Comptable GJ01' })
 
@@ -29,51 +27,36 @@ export default class MainSeeder extends BaseSeeder {
       rank: 20,
     })
 
-    // Définition des fichiers possibles pour ce step
-    await StepFile.create({
+    await File.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE 01',
       defaultPhysicalName: 'GJ000001',
       defaultCopybook: 'CGE000',
     })
-    await StepFile.create({
+    await File.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE 02',
       defaultPhysicalName: 'GJ000002',
       defaultCopybook: 'CGE000',
     })
-    await StepFile.create({
+    await File.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE 03',
       defaultPhysicalName: 'GJ000003',
       defaultCopybook: 'CGE000',
     })
-    await StepFile.create({
+    await File.create({
       stepId: step001.id,
       direction: 'IN',
       logicalName: 'ENTREE 04',
       defaultPhysicalName: 'GJ000004',
       defaultCopybook: 'CGE000',
     })
-    await StepFile.create({
-      stepId: step001.id,
-      direction: 'IN',
-      logicalName: 'ENTREE 05',
-      defaultPhysicalName: 'GJ000005',
-      defaultCopybook: 'CGE000',
-    })
-    await StepFile.create({
-      stepId: step001.id,
-      direction: 'IN',
-      logicalName: 'ENTREE 06',
-      defaultPhysicalName: 'GJ000007',
-      defaultCopybook: 'CGE000',
-    })
 
-    const fileSortie = await StepFile.create({
+    const fileOut01 = await File.create({
       stepId: step001.id,
       direction: 'OUT',
       logicalName: 'SORTIE 01',
@@ -89,14 +72,14 @@ export default class MainSeeder extends BaseSeeder {
       rank: 10,
     })
 
-    await StepFile.create({
+    await File.create({
       stepId: stepGJ02001.id,
       direction: 'IN',
       logicalName: 'ENTREE',
       defaultPhysicalName: 'GJ020001',
       defaultCopybook: 'CGE008',
     })
-    await StepFile.create({
+    await File.create({
       stepId: stepGJ02001.id,
       direction: 'OUT',
       logicalName: 'SORTIE',
@@ -104,23 +87,19 @@ export default class MainSeeder extends BaseSeeder {
       defaultCopybook: 'CFGJ009',
     })
 
-    // 2. LA CONFIGURATION (Le scénario métier)
-    // ------------------------------------------------
-
+    // 2. LA CONFIGURATION
     // Création du Mouvement GE00
     const movDP01 = await Movement.create({
       code: 'DP01',
       description: 'Rattrapage mouvement DP01',
     })
 
-    // A. On dit que DP01 passe par GJ01
     await MovementChain.create({
       movementId: movDP01.id,
       chainId: chainGJ01.id,
       executionOrder: 10,
     })
 
-    // B. On active le step GJ01002 pour ce mouvement
     const mvtStep = await MovementStep.create({
       movementId: movDP01.id,
       stepId: step001.id,
@@ -130,17 +109,15 @@ export default class MainSeeder extends BaseSeeder {
       stepId: step002.id,
     })
 
-    // C. On configure le fichier de sortie spécifique pour ce cas
-    const mvtFileConfig = await MovementStepFile.create({
+    const mvtFileConfig = await MovementFile.create({
       movementStepId: mvtStep.id,
-      stepFileId: fileSortie.id, // On pointe vers SORTECR
-      overridePhysicalName: 'APP.GJ01.DP01.OUTPUT', // Nom spécifique
+      fileId: fileOut01.id,
+      overridePhysicalName: 'APP.GJ01.DP01.OUTPUT',
       isMonitored: true,
     })
 
-    // D. On ajoute la règle de forçage (L'alerte)
     await Rule.create({
-      movementStepFileId: mvtFileConfig.id,
+      movementFileId: mvtFileConfig.id,
       message: 'Attention : Le Code Produit est forcé à 99',
       targetField: 'CODE-PRODUIT',
       technicalDetails: 'Pos 120, Len 02',

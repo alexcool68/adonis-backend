@@ -1,12 +1,6 @@
 import vine from '@vinejs/vine'
 
-export const storeChainCatalogValidator = vine.compile(
-  vine.object({
-    code: vine.string().maxLength(10),
-    description: vine.string().optional(),
-  })
-)
-
+// ok
 export const storeStepCatalogValidator = vine.compile(
   vine.object({
     name: vine.string().maxLength(10),
@@ -14,6 +8,7 @@ export const storeStepCatalogValidator = vine.compile(
   })
 )
 
+// ok
 export const storeStepFileCatalogValidator = vine.compile(
   vine.object({
     direction: vine.enum(['IN', 'OUT']),
